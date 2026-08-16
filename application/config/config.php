@@ -32,9 +32,9 @@ $config['base_url'] = 'http://localhost/literaciapro/';
 define('HOSTNAME', 'localhost');
 define('DBUSERNAME', 'root');
 define('DBPASSWORD', '');
-define('DBNAME', 'uts3');
+define('DBNAME', 'literaciapro');
 define('SITE_URL', $config['base_url']);
-define('BASH_PATH', 'C:/xampp/htdocs/literaciapro/');
+define('BASH_PATH', 'C:/xampp/htdocs/literaciapro');
 
 
 

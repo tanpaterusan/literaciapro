@@ -51,8 +51,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 
 
-$route['default_controller'] = 'Buku/index';
+// $route['default_controller'] = 'Artikel/index';
+$route['default_controller'] = 'Visitor';
 
-$route['buku'] = 'Buku/buku';
-$route['edit'] = 'Buku/edit';
-$route['hapus'] = 'Buku/hapus';
+$route['auth'] = 'Auth';
+$route['admin'] = 'Admin';
+$route['kontributor'] = 'Kontributor';
