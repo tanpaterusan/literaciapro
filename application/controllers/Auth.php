@@ -91,7 +91,7 @@ class Auth extends CI_Controller
                 'kontak' => htmlspecialchars($this->input->post('kontak', true)),
                 'username' => htmlspecialchars($this->input->post('username', true)),
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-                'role' => 'user',
+                'role' => 'kontributor',
                 'deleted' => 0,
                 'is_active' => 1,
             ];

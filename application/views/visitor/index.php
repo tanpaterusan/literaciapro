@@ -5,7 +5,7 @@
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="site-heading">
                     <h1><?= $title ?></h1>
-                    <span class="subheading">Membangun negeri dari literasi.</span>
+                    <span class="subheading">Baca artikel literasi hari ini. <br> Membangun negeri dari literasi.</span>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
                 <hr class="my-4" />
             <?php endforeach; ?>
             <!-- Pager-->
-            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="<?= base_url('visitor/semuaArtikel') ?>">Semua Artikel→</a></div>
         </div>
     </div>
 </div>

@@ -1,5 +1,11 @@
 <?php
 Defined('BASEPATH') or exit('No direct script access allowed');
+/**
+ * @property ArtikelModel $artikelmodel
+ * @property UserModel $usermodel
+ * @property CI_Session $session
+ * @property CI_Input $input
+ */
 
 class ArtikelModel extends CI_Model
 {
@@ -7,6 +13,8 @@ class ArtikelModel extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('url');
+        $this->load->library('session');
     }
 
     public function getRekapArtikel()
@@ -32,22 +40,30 @@ class ArtikelModel extends CI_Model
 
     public function getArtikel($username = null)
     {
-        $sql = "SELECT * FROM ARTIKEL a
-                LEFT JOIN USER u ON a.PENULIS = u.NAMA
-                WHERE a.DELETED = 0 ";
+        $sql = " SELECT a.*, v.*
+                FROM ARTIKEL a
+                LEFT JOIN VALIDASI v 
+                ON a.ID = v.ID_ARTIKEL
+                WHERE a.DELETED = 0";
 
         if ($username) {
-            $sql .= " AND u.USERNAME = '$username' ";
+            $sql .= " AND a.PENULIS IN (SELECT NAMA FROM USER WHERE USERNAME = '$username') ";
         }
-        $sql .= " ORDER BY a.TGL_PUBLIKASI DESC";
+
+        $sql .= " ORDER BY v.TGL_PUBLIKASI DESC";
         $query = $this->db->query($sql)->result_array();
         return $query;
     }
 
     public function getArtikelbyId($id)
     {
-        $sql = "SELECT * FROM ARTIKEL 
-                WHERE DELETED = 0 AND ID = '$id' ";
+        $sql = " SELECT a.*, v.*
+                FROM ARTIKEL a
+                LEFT JOIN VALIDASI v 
+                ON a.ID = v.ID_ARTIKEL
+                WHERE a.DELETED = 0 
+                AND ID = '$id' ";
+
         $query = $this->db->query($sql)->row_array();
         return $query;
     }
@@ -68,28 +84,42 @@ class ArtikelModel extends CI_Model
         return $this->db->affected_rows();
     }
 
-    public function getArtikelForAdmin()
-    {
-        $sql = "SELECT a.*, v.ID_ARTIKEL, v.STATUS STATUS, v.KETERANGAN KETERANGAN, v.PUBLISHED PUBLISHED
-                FROM ARTIKEL a
-                LEFT JOIN VALIDASI v ON a.ID = v.ID_ARTIKEL
-                WHERE a.DELETED = 0
-                ORDER BY a.TGL_PUBLIKASI DESC";
-        $query = $this->db->query($sql)->result_array();
-        return $query;
-    }
-
     public function setArtikel($id, $data)
     {
         $update = [
             'STATUS' => htmlspecialchars($data['status']),
             'KETERANGAN' => htmlspecialchars($data['keterangan']),
             'PUBLISHED' => htmlspecialchars($data['published']),
+            'TGL_PUBLIKASI' => date('Y-m-d H:i:s'),
         ];
 
         $this->db->where('ID_ARTIKEL', $id);
         $this->db->update('validasi', $update);
 
         return $this->db->affected_rows();
+    }
+
+    public function getArtikelForVisitor($limit = null, $offset = null)
+    {
+
+        if (!$limit && !$offset) {
+            $sql = "SELECT a.*, v.*
+                FROM ARTIKEL a
+                LEFT JOIN VALIDASI v ON a.ID = v.ID_ARTIKEL
+                WHERE a.DELETED = 0
+                AND PUBLISHED = 1
+                ORDER BY v.TGL_PUBLIKASI DESC";
+            $query = $this->db->query($sql)->result_array();
+        } else {
+            $sql = "SELECT a.*, v.*
+                FROM ARTIKEL a
+                LEFT JOIN VALIDASI v ON a.ID = v.ID_ARTIKEL
+                WHERE a.DELETED = 0
+                AND PUBLISHED = 1
+                ORDER BY v.TGL_PUBLIKASI DESC
+                LIMIT ? OFFSET ?";
+            $query = $this->db->query($sql, [$limit, $offset])->result_array();
+        }
+        return $query;
     }
 }

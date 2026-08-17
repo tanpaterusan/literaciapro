@@ -51,6 +51,11 @@ class Admin extends CI_Controller
         $is_active = $this->input->post('is_active');
         $role = $this->input->post('role');
 
+        // var_dump($username);
+        // var_dump($is_active);
+        // var_dump($role);
+        // die;
+
         if (empty($username)) {
             echo json_encode(['status' => 'error', 'message' => 'Username tidak valid!']);
             return;
@@ -76,7 +81,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->usermodel->getUserByUsername($username);
 
         $data['title'] = 'Kelola Artikel';
-        $data['artikel'] = $this->artikelmodel->getArtikelForAdmin();
+        $data['artikel'] = $this->artikelmodel->getArtikel();
         $this->load->view('templates/backend/header', $data);
         $this->load->view('templates/backend/admin_sidebar', $data);
         $this->load->view('admin/m_artikel', $data);
@@ -117,7 +122,7 @@ class Admin extends CI_Controller
         $username = $this->session->userdata('username');
         $data['user'] = $this->usermodel->getUserByUsername($username);
 
-        $data['title'] = 'Kelola Artikel';
+        $data['title'] = 'Baca Artikel';
         $data['artikel'] = $this->artikelmodel->getArtikelbyId($id);
         $this->load->view('templates/backend/header', $data);
         $this->load->view('templates/backend/admin_sidebar', $data);

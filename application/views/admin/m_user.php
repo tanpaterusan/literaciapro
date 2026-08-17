@@ -109,7 +109,7 @@
 
         document.getElementById('edit-username').value = username;
         // checkbox harus pakai .checked, bukan .value
-        document.getElementById('edit-is_active').checked = (isActive === 'aktif');
+        document.getElementById('edit-is_active').checked = (isActive === 1);
         document.getElementById('edit-role').value = role;
     });
 
@@ -119,7 +119,7 @@
 
         const formData = new FormData();
         formData.append('username', document.getElementById('edit-username').value);
-        formData.append('is_active', document.getElementById('edit-is_active').checked ? 'aktif' : 'nonaktif');
+        formData.append('is_active', document.getElementById('edit-is_active').checked ? 1 : 0);
         formData.append('role', document.getElementById('edit-role').value);
 
         fetch('<?= base_url('admin/setUser') ?>', {

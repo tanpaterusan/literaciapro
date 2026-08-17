@@ -26,9 +26,38 @@ class Kontributor extends CI_Controller
 
         $data['title'] = 'Daftar Kontribusi Anda';
         $data['artikel'] = $this->artikelmodel->getArtikel($username);
+
         $this->load->view('templates/backend/header', $data);
         $this->load->view('templates/backend/kontributor_sidebar', $data);
         $this->load->view('kontributor/index', $data);
+        $this->load->view('templates/backend/footer', $data);
+    }
+
+    public function getStatus($id)
+    {
+        if (empty($id)) {
+            echo json_encode(['status' => 'error', 'message' => 'ID artikel tidak valid!']);
+            return;
+        }
+        $artikel = $this->artikelmodel->getArtikelById($id);
+
+        if ($artikel) {
+            echo json_encode(['status' => 'success', 'artikel' => $artikel]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Artikel tidak ditemukan!']);
+        }
+    }
+
+    public function bacaArtikel($id)
+    {
+        $username = $this->session->userdata('username');
+        $data['user'] = $this->usermodel->getUserByUsername($username);
+
+        $data['title'] = 'Baca Artikel';
+        $data['artikel'] = $this->artikelmodel->getArtikelbyId($id);
+        $this->load->view('templates/backend/header', $data);
+        $this->load->view('templates/backend/kontributor_sidebar', $data);
+        $this->load->view('kontributor/baca_artikel', $data);
         $this->load->view('templates/backend/footer', $data);
     }
 
@@ -77,7 +106,6 @@ class Kontributor extends CI_Controller
                 'judul' => htmlspecialchars($this->input->post('judul')),
                 'penulis' => htmlspecialchars($data['user']['nama']),
                 'isi_artikel' => htmlspecialchars($this->input->post('isi_artikel')),
-                'tgl_publikasi' => date('Y-m-d H:i:s'),
                 'gambar' => htmlspecialchars($gambar),
                 'deleted' => 0,
                 'kategori' => htmlspecialchars($this->input->post('kategori')),
@@ -91,7 +119,6 @@ class Kontributor extends CI_Controller
             $insertValidasi = [
                 'id_artikel' => $idArtikel,
                 'status' => 'request',
-                'keterangan' => null,
                 'published' => 0,
             ];
             $this->db->insert('validasi', $insertValidasi);

@@ -33,9 +33,9 @@
                                 <td><?= $row['judul']; ?></td>
                                 <td><?= $row['penulis']; ?></td>
                                 <td><?= $row['tgl_publikasi']; ?></td>
-                                <td><?= $row['STATUS']; ?></td>
-                                <td><?= $row['KETERANGAN']; ?></td>
-                                <?php if ($row['PUBLISHED'] == 1): ?>
+                                <td><?= $row['status']; ?></td>
+                                <td><?= $row['keterangan']; ?></td>
+                                <?php if ($row['published'] == 1): ?>
                                     <td style="color:green"><i class="fas fa-check-circle"></i></td>
                                 <?php else: ?>
                                     <td style="color:red"><i class="fas fa-times-circle"></i></td>
@@ -55,8 +55,8 @@
                                         title="Setting Artikel"
                                         data-bs-target="#ubahModal"
                                         data-bs-id="<?= $row['id']; ?>"
-                                        data-bs-status="<?= $row['STATUS']; ?>" data-bs-keterangan="<?= $row['KETERANGAN']; ?>"
-                                        data-bs-published="<?= $row['PUBLISHED']; ?>">
+                                        data-bs-status="<?= $row['status']; ?>" data-bs-keterangan="<?= $row['keterangan']; ?>"
+                                        data-bs-published="<?= $row['published']; ?>">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>
